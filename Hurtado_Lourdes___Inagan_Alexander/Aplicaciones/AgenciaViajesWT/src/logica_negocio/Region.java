@@ -1,5 +1,8 @@
 package logica_negocio;
 
+import com.google.gson.Gson;
+import java.util.ArrayList;
+
 /**
  * 
  * @author Alexander Inagan
@@ -33,5 +36,4 @@ public class Region {
     public void setNombre_region(String nombre_region) {
         this.nombre_region = nombre_region;
     }
-
 }

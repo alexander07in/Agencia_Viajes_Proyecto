@@ -14,7 +14,7 @@ import logica_negocio.Usuario;
  * 
  * @author Alexander Inagan
  */
-public class ServiciosAgenciaSocket implements IServiciosClientes, IServiciosUsuarios, IServiciosSesiones {
+public class ServiciosAgenciaSocket implements IServiciosClientes, IServiciosUsuarios, IServiciosSesiones, IServiciosRegiones {
 
     private Socket socket;
     private Scanner entradaDecorada;
@@ -373,4 +373,74 @@ public class ServiciosAgenciaSocket implements IServiciosClientes, IServiciosUsu
         }
         return respuesta;
     }
+    
+    /**
+     * Consulta las regiones registradas en el servidor.
+     * @return String
+     */
+    @Override
+    public String consultarRegiones()
+    {
+        String respuesta = null;
+        String accion = "Consultar Regiones";
+        
+        try
+        {
+            conectar(IP_SERVIDOR, PUERTO);
+            respuesta = leerFlujoEntradaSalida(accion);
+            cerrarFlujos();
+            desconectar();
+        }
+        catch (IOException ex) {
+            Logger.getLogger(ServiciosAgenciaSocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return respuesta;
+    }
+    
+    /**
+     * Consulta los paises de una region en especifico.
+     * @param nombre_region
+     * @return String, paises de la región
+     */
+    @Override
+    public String consultarPaises(String nombre_region)
+    {
+        String respuesta = null;
+        String accion = "Consultar Paises";
+        try
+        {
+            conectar(IP_SERVIDOR, PUERTO);
+            respuesta = leerFlujoEntradaSalida(accion + "," + nombre_region);
+            cerrarFlujos();
+            desconectar();
+        }
+        catch (IOException ex) {
+            Logger.getLogger(ServiciosAgenciaSocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return respuesta;
+    }
+    
+    /**
+     * Consulta todas las ciudades de una país en especifico
+     * @param nombre_ciudad
+     * @return String, Ciudades del País
+     */
+    @Override
+    public String consultarCiudades(String nombre_ciudad)
+    {
+        String respuesta = null;
+        String accion = "Consultar Ciudades";   
+        try
+        {
+            conectar(IP_SERVIDOR, PUERTO);
+            respuesta = leerFlujoEntradaSalida(accion + "," + nombre_ciudad);
+            cerrarFlujos();
+            desconectar();
+        }
+        catch (IOException ex) {
+            Logger.getLogger(ServiciosAgenciaSocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return respuesta;
+    }
+    
 }

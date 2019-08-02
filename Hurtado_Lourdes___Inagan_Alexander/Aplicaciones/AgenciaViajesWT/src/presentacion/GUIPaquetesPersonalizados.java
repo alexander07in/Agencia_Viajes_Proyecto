@@ -1,11 +1,13 @@
 package presentacion;
 
+import java.util.ArrayList;
 import utilidades.Utilidades;
 import java.util.Date;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import logica_negocio.GestorRegiones;
+import logica_negocio.Region;
 
 /**
  *
@@ -14,17 +16,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GUIPaquetesPersonalizados extends javax.swing.JInternalFrame {
 
+    private GestorRegiones gestor_regiones;
     /**
      * Constructor
      */
     public GUIPaquetesPersonalizados() {
+        gestor_regiones = new GestorRegiones();
         initComponents();
         //inicializarTabla();
-//        inicializarFechas();
+        inicializarFechas();
+        inicializarRegiones();
         this.setSize(790, 580);
     }
 
-//    private void inicializarFechas() {
+    private void inicializarFechas() {
 //        Date fecha = Utilidades.sumarDiasAFecha(new Date(), 30);
 //        String strFecha = Utilidades.formatoFecha(fecha);
 //        txtFechaSalida.setText(strFecha);
@@ -33,8 +38,23 @@ public class GUIPaquetesPersonalizados extends javax.swing.JInternalFrame {
 //        strFecha = Utilidades.formatoFecha(fecha);
 //
 //        txtFechaLLegada.setText(strFecha);
-//
-//    }
+
+    }
+    
+    private void inicializarRegiones() {
+        
+        ArrayList<Region> lista_regiones = gestor_regiones.obtener_Regiones();
+        DefaultListModel modelo = new DefaultListModel();
+        
+        if(!lista_regiones.isEmpty())
+        {
+            for(int i=0; i < lista_regiones.size(); i++)
+            {
+                modelo.addElement(lista_regiones.get(i).getNombre_region());
+            }   
+            lstRegion.setModel(modelo);
+        }
+    }
 
     private void inicializarTabla() {
         /*
@@ -162,11 +182,7 @@ public class GUIPaquetesPersonalizados extends javax.swing.JInternalFrame {
         gridBagConstraints.insets = new java.awt.Insets(27, 28, 0, 0);
         pnlPestaniaPaquete.add(jLabel13, gridBagConstraints);
 
-        lstRegion.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Caribe", "Centro América", "Europa", "Tierra Santa", "Norte de Africa", "Asia" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        lstRegion.setBackground(new java.awt.Color(153, 255, 153));
         lstRegion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstRegionMouseClicked(evt);
@@ -188,6 +204,7 @@ public class GUIPaquetesPersonalizados extends javax.swing.JInternalFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 12, 0, 0);
         pnlPestaniaPaquete.add(jScrollPane8, gridBagConstraints);
 
+        lstCiudad.setBackground(new java.awt.Color(228, 199, 155));
         jScrollPane9.setViewportView(lstCiudad);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -204,6 +221,7 @@ public class GUIPaquetesPersonalizados extends javax.swing.JInternalFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 28, 0, 0);
         pnlPestaniaPaquete.add(jScrollPane9, gridBagConstraints);
 
+        lstPais.setBackground(new java.awt.Color(211, 233, 168));
         lstPais.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstPaisMouseClicked(evt);
@@ -320,67 +338,41 @@ public class GUIPaquetesPersonalizados extends javax.swing.JInternalFrame {
 
     private void lstRegionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstRegionMouseClicked
         // TODO add your handling code here:
-        String region = lstRegion.getSelectedValue();
-        DefaultListModel modelo;
-        switch (region) {
-            case "Caribe":
-                modelo = new DefaultListModel();
-                modelo.addElement("Colombia");
-                modelo.addElement("Panamá");
-                modelo.addElement("Costa Rica");
-                lstPais.setModel(modelo);
-                break;
-            case "Europa":
-                modelo = new DefaultListModel();
-                modelo.addElement("España");
-                modelo.addElement("Francia");
-                modelo.addElement("Italia");
-                lstPais.setModel(modelo);
-                break;
-            case "Centro América":
-                modelo = new DefaultListModel();
-                modelo.addElement("Costa Rica");
-                modelo.addElement("Guatemala");
-                modelo.addElement("México");
-                modelo.addElement("Panamá");
-                lstPais.setModel(modelo);
-                break;
-            default:
-                modelo = new DefaultListModel();
-                lstPais.setModel(modelo);
+        String region = lstRegion.getSelectedValue().trim();
+        DefaultListModel modelo = new DefaultListModel();
+        
+        ArrayList<Region> lista_paises = gestor_regiones.obtener_Paises(region);
+        if(!lista_paises.isEmpty())
+        {
+            for(int i=0; i < lista_paises.size(); i++)
+            {
+                modelo.addElement(lista_paises.get(i).getNombre_region());
+            }   
+            lstPais.setModel(modelo);
+        }
+        else
+        {
+            lstPais.setModel(modelo);
         }
     }//GEN-LAST:event_lstRegionMouseClicked
 
     private void lstPaisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstPaisMouseClicked
         // TODO add your handling code here:
         String pais = lstPais.getSelectedValue();
-        DefaultListModel modelo;
-        switch (pais) {
-            case "Colombia":
-                modelo = new DefaultListModel();
-                modelo.addElement("San Andrés");
-                modelo.addElement("Cartagena");
-                modelo.addElement("Santa Marta");
-                lstCiudad.setModel(modelo);
-                break;
-            case "España":
-                modelo = new DefaultListModel();
-                modelo.addElement("Albacete");
-                modelo.addElement("Madrid");
-                modelo.addElement("Valencia");
-                lstCiudad.setModel(modelo);
-                break;
-            case "Costa Rica":
-                modelo = new DefaultListModel();
-                modelo.addElement("Cartago");
-                modelo.addElement("Golfito");
-                modelo.addElement("San Jose");
-
-                lstCiudad.setModel(modelo);
-                break;
-            default:
-                modelo = new DefaultListModel();
-                lstCiudad.setModel(modelo);
+        DefaultListModel modelo = new DefaultListModel();
+         
+        ArrayList<Region> lista_ciudades = gestor_regiones.obtener_Ciudades(pais);
+        if(!lista_ciudades.isEmpty())
+        {
+            for(int i=0; i < lista_ciudades.size(); i++)
+            {
+                modelo.addElement(lista_ciudades.get(i).getNombre_region());
+            }   
+            lstCiudad.setModel(modelo);
+        }
+        else
+        {
+            lstCiudad.setModel(modelo);
         }
     }//GEN-LAST:event_lstPaisMouseClicked
 
