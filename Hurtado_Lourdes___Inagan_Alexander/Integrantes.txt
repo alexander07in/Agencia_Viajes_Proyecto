@@ -1,0 +1,7 @@
+Proyecto Agencia de Viajes 'World Travels'
+
+Integrantes:
+-Lourdes Gisel Hurtado      codigo: 104615020500
+-Leyder Alexander Inagan    codigo: 104615021575
+
+Lab. Ingeniería de Software II
